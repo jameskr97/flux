@@ -1,0 +1,46 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: nanonetwork-ca-bundle
+  namespace: critical
+spec:
+  target:
+    configMap:
+      key: ca.crt
+    secret:
+      key: ca.crt
+    namespaceSelector:
+      matchLabels:
+        trust-manager.io/sync: "true"
+  sources:
+  - inLine: |
+      -----BEGIN CERTIFICATE-----
+      MIIFNTCCAx2gAwIBAgIIYZT2JsHq+nEwDQYJKoZIhvcNAQELBQAwFjEUMBIGA1UE
+      AxMLTmFub05ldHdvcmswIBcNMjMwMzE4MTI1MDMyWhgPMjA1NjAxMjQxMjUwMzJa
+      MBYxFDASBgNVBAMTC05hbm9OZXR3b3JrMIICIjANBgkqhkiG9w0BAQEFAAOCAg8A
+      MIICCgKCAgEAmyXkhZopqXBzaweEA9JOjLKEukcoBc6KlQKA+3VhVIHnlwmDydQh
+      t19p9RZ12PU4ocHj63jHXhuUmKc6N1sQwo6TWPVCYtirLiHaJzi3l1HU0LMJyGL6
+      WAizY1Oq3Lz3nlXw8wFyEIREULN+2jGaTCN5MqVSgNLfnl4SCHNp3CtUaXB6EDtN
+      AAgS2obkOMH/nhjrymx+58d0bAzBR8Xmbuuu5juSS9L40HVe5mYnCtoCcBHfKPXT
+      02Dd5ZzLbG8lDZLmS6Zc9TzsKZVqj//78lab/lUzJcz7pmIYKNiL55MgZaK0+S51
+      ZT1Sr++pEU6ujngnYPA2MXER9IAbweSVe0CzjosyeW85WcusTwCwlYbALu65ducG
+      hTXFmUuPVNVTiT88ZCutkckKI4FVQLYoPIGr+X0URS3GBHh/3/kETaMh6nJaPthr
+      JVoW6ODHcdw1+R6qUM+5xXB4NKelLwj/STHE7oxnlScoVCDRoOy1kUIV08NvFE4M
+      P0YlleDNAR8hsqXY3vDE1z+9GLhv+p/cOUmLkvw8T6MfdNU56iWlI38MIVxqnqWT
+      egmhJ+uzVa6UYV6At2tib13JErycH/kzNuQfycaKUYK/MUIwnWPSvoxzMmx9rjrG
+      gYBX+lH7cWLa7SCA8/CDezFkZJIJdCOcl5/F/yE/FeHA/zXEyYEBBf8CAwEAAaOB
+      hDCBgTAdBgNVHQ4EFgQUnYB/jWtgTNWruasaoE9ennm/a5YwRQYDVR0jBD4wPIAU
+      nYB/jWtgTNWruasaoE9ennm/a5ahGqQYMBYxFDASBgNVBAMTC05hbm9OZXR3b3Jr
+      gghhlPYmwer6cTAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjANBgkqhkiG9w0B
+      AQsFAAOCAgEAhm1d2OP/m4BriE9glGuZDUW4nky/75XjJd4qjYcSL0k3oNTNxp20
+      upMRIVq5sJ7wyhdwUzBkSQkCcLPwSIhV92NUdW/FTqta2KTjazyvmsCnJGl9ucD9
+      SxkLeDNDe+qwMPE7k7ScrBh+a8bZGwqQIJ5/DtuYyQJHzj3J4liAu2Vo23GOtv6e
+      vIphTvsuPIkeuaQhEtjOHc4u4uSdPoLNC2OsQRa5zuK7CkW7CRMdkTjN3iqRljUO
+      zjZcsevH09M8+cUXKvTcYEa1eCnlcljJI4swgDUsOjm3iGEYhB/1nQoLG0uc1Rxo
+      pfPiPBbzMPh3R26dlUI4qnUrfWaH5H/Ikd8qS1aE6YxMT/ziuvlPCy9bC4BLww21
+      MpZmFwH4b6N+0LOKGB+b2qmiHkGO4OrrfT81ZOBeZpHpalRwvpOmVSya6p5Yk96c
+      UQgPGH9iBgHEouAOBPTH0aFvexr+a2TbzSK2IgO67gD7zRq85JXFxqzYA6sR34GI
+      sjkw8odT1w2pRGX35pMWby9YTonkLEdmNJTcwcIFaOaZ58DVdl74AjMCQVTorvtd
+      sUXzY2Hgq02AUeBUDZkBcoX0hvprep44UcwOlcqXvglXP9YkYQJJ1WDiYvvF8UkV
+      4Dbkv2iTiggeyYtmQHTII0SNPJNU3pCKqt4VbMGs7uLf/oYO5F7Ilm0=
+      -----END CERTIFICATE-----
