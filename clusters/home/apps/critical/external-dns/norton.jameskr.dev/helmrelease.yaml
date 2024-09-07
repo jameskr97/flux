@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app external-dns-norton
+  namespace: critical
+spec:
+  interval: 30m
+  timeout: 2m
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.14.5
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"
+    policy: sync
+    domainFilters: ["norton.jameskr.dev"]
+    provider:
+      name: rfc2136
+    extraArgs:
+      - --rfc2136-gss-tsig
+      - --rfc2136-host=dc-01.norton.jameskr.dev
+      - --rfc2136-port=53
+      - --rfc2136-zone=norton.jameskr.dev
+      - --rfc2136-kerberos-username=external-dns
+      - --rfc2136-kerberos-realm=norton.jameskr.dev
+      - --rfc2136-tsig-axfr
+    extraVolumes:
+      - name: krb5-conf-volume
+        configMap:
+          defaultMode: 420
+          name: krb5.conf
+    extraVolumeMounts:
+      - mountPath: /etc/krb5.conf
+        name: krb5-conf-volume
+        subPath: krb5.conf
+        readOnly: true
+    env:
+      - name: EXTERNAL_DNS_RFC2136_KERBEROS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: external-dns-secret
+            key: external-dns-password
