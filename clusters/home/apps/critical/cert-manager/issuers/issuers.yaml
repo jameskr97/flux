@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: norton-vault
+  namespace: critical
+spec:
+  vault:
+    path: NanoNetworkPKI/sign/Kubernetes.Internal.Norton
+    server: https://vault.norton.jameskr.dev
+    caBundleSecretRef:
+      name: nanonetwork-ca-bundle
+      key: ca.crt
+    auth:
+      tokenSecretRef:
+        name: hcvault-secret
+        key: vault-token
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: jameskr97@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+      - dns01:
+          cloudflare:
+            email: jameskr97@gmail.com
+            apiTokenSecretRef:
+              name: cloudflare-secret
+              key: CLOUDFLARE_API_TOKEN
+        selector:
+          dnsZones: ["jameskr.dev"]
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: jameskr97@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+      - dns01:
+          cloudflare:
+            email: jameskr97@gmail.com
+            apiTokenSecretRef:
+              name: cloudflare-secret
+              key: CLOUDFLARE_API_TOKEN
+        selector:
+          dnsZones: ["jameskr.dev"]

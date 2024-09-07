@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app cert-manager
+  namespace: critical
+spec:
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  path: ./clusters/home/apps/critical/cert-manager/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: cert-manager
+      namespace: critical
