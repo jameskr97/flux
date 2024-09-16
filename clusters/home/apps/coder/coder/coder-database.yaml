@@ -1,0 +1,34 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: coder-database
+  namespace: coder
+spec:
+  instances: 1
+
+  storage:
+    storageClass: nfs-client
+    size: 1Gi
+
+  # secret is from externalsecret.yaml
+  bootstrap:
+    initdb:
+      database: coder
+      owner: coder
+      secret:
+        name: coder-secret
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: coder-backup
+  namespace: coder
+spec:
+  immediate: true
+  schedule: "0 0 0 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: coder-database
