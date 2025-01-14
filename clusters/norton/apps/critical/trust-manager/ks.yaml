@@ -1,0 +1,42 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trust-manager
+  namespace: critical
+spec:
+  interval: 30m
+  timeout: 1m
+  path: "./clusters/norton/apps/critical/trust-manager/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: trust-manager
+      namespace: critical
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trust-manager-certs
+  namespace: critical
+spec:
+  interval: 30m
+  timeout: 1m
+  path: "./clusters/norton/apps/critical/trust-manager/certs"
+  prune: true
+  dependsOn:
+    - name: trust-manager
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: trust-manager
+      namespace: critical
+
