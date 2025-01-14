@@ -10,6 +10,7 @@ spec:
   path: ./clusters/universal
   interval: 5m
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-norton
@@ -21,13 +22,12 @@ metadata:
   name: cluster-norton-apps
   namespace: flux-system
 spec:
-  targetNamespace: flux-system
   path: ./clusters/norton
+  prune: true
+  wait: false
   dependsOn:
     - name: cluster-meta
   interval: 5m
-  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-norton
-  wait: false

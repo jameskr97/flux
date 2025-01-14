@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: norton-vault-store
+spec:
+  provider:
+    vault:
+      server: https://vault.norton.jameskr.dev
+      version: v2
+      caProvider:
+        type: ConfigMap
+        name: nanonetwork-ca-bundle
+        namespace: critical
+        key: ca.crt
+      auth:
+        tokenSecretRef:
+          name: hcvault-secret
+          key: vault-token
+          namespace: critical

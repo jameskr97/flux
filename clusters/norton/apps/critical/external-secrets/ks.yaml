@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# the secret for external-secrets is the hcvault token, encrypted with sops
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app external-secrets-vaultsecret
+  namespace: flux-system
+spec:
+  targetNamespace: critical
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./clusters/norton/apps/critical/external-secrets/secret
+  prune: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+  wait: true
+  interval: 2m
+  timeout: 1m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app external-secrets
+  namespace: flux-system
+spec:
+  targetNamespace: critical
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./clusters/norton/apps/critical/external-secrets/app
+  prune: true
+  dependsOn:
+    - name: external-secrets-vaultsecret
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+  wait: true
+  interval: 1m
+  timeout: 1m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app external-secrets-stores
+  namespace: flux-system
+spec:
+  targetNamespace: critical
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: external-secrets
+  path: ./clusters/norton/apps/critical/external-secrets/stores
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+  wait: true
+  interval: 30m
+  timeout: 5m
