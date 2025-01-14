@@ -3,6 +3,22 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: cluster-norton-config
+  namespace: flux-system
+spec:
+  targetNamespace: flux-system
+  path: ./clusters/norton/config
+  interval: 5m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-norton
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: cluster-meta
   namespace: flux-system
 spec:
@@ -27,6 +43,7 @@ spec:
   wait: false
   dependsOn:
     - name: cluster-meta
+    - name: cluster-norton-config
   interval: 5m
   sourceRef:
     kind: GitRepository
