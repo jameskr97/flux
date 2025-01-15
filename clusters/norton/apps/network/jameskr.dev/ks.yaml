@@ -2,13 +2,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app network-jameskr.dev-externaldns
+  name: &app external-dns-jameskr.dev
   namespace: flux-system
 spec:
   targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: external-secrets-stores
   path: ./clusters/norton/apps/network/jameskr.dev/external-dns
   prune: true
   sourceRef:
