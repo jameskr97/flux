@@ -1,0 +1,8 @@
+---
+originRequest:
+  originServerName: external.jameskr.dev
+
+ingress:
+  - hostname: "*.jameskr.dev"
+    service: https://ingress-nginx-external-controller.network.svc.cluster.local:443
+  - service: http_status:404

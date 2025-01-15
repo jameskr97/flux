@@ -1,0 +1,11 @@
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared
+  namespace: critical
+spec:
+  endpoints:
+    - dnsName: external.jameskr.dev
+      recordType: CNAME
+      targets: ["12aca5a9-d3e2-482b-9d8b-f4b11d662176.cfargotunnel.com"]
