@@ -1,21 +1,22 @@
-# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
-# apiVersion: cert-manager.io/v1
-# kind: ClusterIssuer
-# metadata:
-#   name: norton-vault
-#   namespace: network
-# spec:
-#   vault:
-#     path: NanoNetworkPKI/sign/Kubernetes.Internal.Norton
-#     server: https://vault.norton.jameskr.dev
-#     caBundleSecretRef:
-#       name: nanonetwork-ca-bundle
-#       key: ca.crt
-#     auth:
-#       tokenSecretRef:
-#         name: hcvault-secret
-#         key: vault-token
-# ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
+# keep in critical namespace?
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: norton-vault
+  namespace: network
+spec:
+  vault:
+    path: NanoNetworkPKI/sign/Kubernetes.Internal.Norton
+    server: https://vault.norton.jameskr.dev
+    caBundleSecretRef:
+      name: nanonetwork-ca-bundle
+      key: ca.crt
+    auth:
+      tokenSecretRef:
+        name: hcvault-secret
+        key: vault-token
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
