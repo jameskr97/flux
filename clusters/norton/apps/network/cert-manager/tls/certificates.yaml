@@ -12,3 +12,16 @@ spec:
     kind: ClusterIssuer
   commonName: jameskr.dev
   dnsNames: ["jameskr.dev", "*.jameskr.dev"]
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: norton-jameskr-dev
+  namespace: network
+spec:
+  secretName: norton-jameskr-dev-tls
+  issuerRef:
+    name: norton-vault
+    kind: ClusterIssuer
+  commonName: norton.jameskr.dev
+  dnsNames: ["norton.jameskr.dev", "*.norton.jameskr.dev"]
