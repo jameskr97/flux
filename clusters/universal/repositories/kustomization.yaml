@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./bjw-s.yaml
   - ./cloudnative-pg.yaml
+  - ./emberstack.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
   - ./ingress-nginx.yaml
