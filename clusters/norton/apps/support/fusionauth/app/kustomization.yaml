@@ -3,6 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./ns.yaml
-  - ./mqtt/ks.yaml
-  - ./fusionauth/ks.yaml
+  - ./externalsecrets.yaml
+  - ./ingress.yaml
+  - ./helmrelease.yaml

@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app fusionauth
+  namespace: support
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: fusionauth
+      version: 0.10.5
+      sourceRef:
+        kind: HelmRepository
+        name: fusionauth
+        namespace: flux-system
+  values:
+    replicaCount: 1
+    image:
+      repository: fusionauth/fusionauth-app
+      tag: 1.55.1
+    database:
+      protocol: postgresql
+      host: 10.20.0.3
+      port: 5432
+      tls: false
+      name: fusionauth
+      user: fusionauth
+      existingSecret: fusionauth-creds
+    search:
+      engine: database

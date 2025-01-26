@@ -8,5 +8,6 @@ resources:
   - ./emberstack.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
+  - ./fusionauth.yaml
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
