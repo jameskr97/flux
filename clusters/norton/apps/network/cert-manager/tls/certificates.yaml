@@ -25,3 +25,16 @@ spec:
     kind: ClusterIssuer
   commonName: norton.jameskr.dev
   dnsNames: ["norton.jameskr.dev", "*.norton.jameskr.dev"]
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: norton-jameskr-dev-le
+  namespace: network
+spec:
+  secretName: norton-jameskr-dev-le-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: norton.jameskr.dev
+  dnsNames: ["norton.jameskr.dev", "*.norton.jameskr.dev"]
