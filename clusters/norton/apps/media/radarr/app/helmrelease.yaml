@@ -1,0 +1,66 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app radarr
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      radarr:
+        containers:
+          main:
+            image:
+              repository: linuxserver/radarr
+              tag: latest
+              pullPolicy: IfNotPresent
+            env:
+              TZ: America/New_York
+              RADARR__LOG__ANALYTICSENABLED: "false"
+              RADARR__APP__INSTANCENAME: Radarr
+              RADARR__APP__THEME: dark
+              RADARR__SERVER__PORT: &port 80
+    service:
+      main:
+        type: ClusterIP
+        annotations:
+        controller: radarr
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        className: internal
+        hosts:
+          - host: radarr.norton.jameskr.dev
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: radarr
+                  port: *port
+    persistence:
+      config:
+        enabled: true
+        type: nfs
+        server: 10.20.0.3
+        path: /srv/k8s/_media/radarr
+        globalMounts:
+          - path: /config
+      storage:
+        enabled: true
+        type: nfs
+        server: 10.20.0.3
+        path: /srv/storage/tank
+        globalMounts:
+          - path: /srv/storage
