@@ -6,3 +6,4 @@ resources:
   - ./ns.yaml
   - ./mqtt/ks.yaml
   - ./fusionauth/ks.yaml
+  - ./kanidm/ks.yaml

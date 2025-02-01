@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app kanidm
+  namespace: support
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      kanidm:
+        containers:
+          main:
+            image:
+              repository: kanidm/server
+              tag: latest
+              pullPolicy: IfNotPresent
+    service:
+      main:
+        type: ClusterIP
+        annotations:
+        controller: kanidm
+        ports:
+          http:
+            port: &port 8443
+    ingress:
+      main:
+        className: external
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        hosts:
+          - host: kanidm.jameskr.dev
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: kanidm
+                  port: *port
+    persistence:
+      data:
+        enabled: true
+        type: nfs
+        server: 10.20.0.3
+        path: /srv/k8s/_support/kanidm
+        globalMounts:
+          - path: /data
+      config:
+        type: configMap
+        name: kanidm-configmap
+        globalMounts:
+          - path: /data/server.toml
+            subPath: server.toml
+            readOnly: true
+      tls:
+        type: secret
+        name: jameskr-dev-tls
+        globalMounts:
+          - path: /data/chain.pem
+            subPath: tls.crt
+            readOnly: true
+          - path: /data/key.pem
+            subPath: tls.key
+            readOnly: true
+
+
+
+
